@@ -17,3 +17,33 @@ packets and ignore all input conditions that do not adhere to the framing
 protocol.
 
 ## Framing protocol
+
+## TB
+
+`frameTb.sv` is the top level Tb module. The module instances the DUT and
+`frameAssertions.sv` which contains the properties and assertions. The top level
+Tb drives the inputs of both submodules and connects the output of the DUT to
+the respective inputs of `frameAssertions.sv`.
+
+`frameAssertions.sv` contains ONLY synthesizable auxillary logic i.e does not
+contain implication operators or time delays.
+
+Note: Properties were written in this manner as Verilator has limited support
+for the `property` keyword. However, they can be replaced to the widely used
+method eg -
+
+```
+property <prop_propertyName>
+  @(posedge i_clk) <assert_aseertionName>
+endproperty
+
+assert property(<prop_propertyName>);
+```
+
+# Makefile
+
+Prerequisites: Verilator, JasperGold FPV
+
+Lint TB and design: `make lint`
+
+Formally verify assertions: `make formal` (all assertions should pass).

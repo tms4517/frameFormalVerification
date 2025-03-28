@@ -18,6 +18,36 @@ protocol.
 
 ## Framing protocol
 
+A packet consists of 3 signals:
+1. Start Of Packet (SOP): It is asserted for 1 clock cycle to mark the start of
+a packet.
+2. End Of Packet (EOP) It is asserted for 1 clock cycle to mark the end of a
+packet.
+3. Valid: When asserted, it indicates that the SOP and EOP signals are valid.
+It can be deasserted at any time. When deasserted, the SOP or EOP signals are
+ignored and masked by the framing protocol. THe valid signal must pass straight
+through the `frame` module.
+
+When the reset is active i.e '0, the SOP and EOP signals should be deasserted.
+
+A frame can be from 1 to an infinite number of clock cycles long. i.e SOP and
+EOP can be asserted in the same clock cycle or spaced an infinite number of
+clock cycles apart.
+
+The framing protocol should correct any framing error. That is;
+- Two SOPs without an EOP between them.
+- An EOP without a corresponding SOP.
+
+Below are various examples:
+
+![fig1](docs/fig1.png)
+![fig2](docs/fig2.png)
+![fig3](docs/fig3.png)
+![fig4](docs/fig4.png)
+![fig5](docs/fig5.png)
+![fig6](docs/fig6.png)
+![fig7](docs/fig7.png)
+
 ## TB
 
 `frameTb.sv` is the top level Tb module. The module instances the DUT and
